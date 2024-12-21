@@ -37,7 +37,7 @@ public class GameState extends State {
             server.start();
         }
 
-        player = new PlayerSP("joe", 0, 0, 32, 32, 100);
+        player = new PlayerSP("nuts", 0, 0, 32, 32, 100);
 
         client = new Client(player);
         client.init("localhost", 25565);
@@ -49,7 +49,9 @@ public class GameState extends State {
     @Override
     public void update(double delta) {
         player.update(delta);
-        client.sendPacket(Packet.getData(new C06PlayerMovePacket(player.getUsername(), (int) player.getX(), (int) player.getY())));
+        if (player.getDx() != 0 || player.getDy() != 0) {
+            client.sendPacket(Packet.getData(new C06PlayerMovePacket(player.getUsername(), (int) player.getX(), (int) player.getY())));
+        }
 
         for (PlayerMP player : client.getPlayers()) {
             player.update(delta);

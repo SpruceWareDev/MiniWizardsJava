@@ -90,6 +90,9 @@ public class Server extends Thread {
                 // Client move packet
                 String[] playerData = new String(packetData).trim().split(",");
                 getPlayer(playerData[0]).ifPresent((playerMP) -> {
+                    if (playerMP.getX() == Integer.parseInt(playerData[1]) && playerMP.getY() == Integer.parseInt(playerData[2])) {
+                        return;
+                    }
                     playerMP.setX(Integer.parseInt(playerData[1]));
                     playerMP.setY(Integer.parseInt(playerData[2]));
                     sendToAll(Packet.getData(

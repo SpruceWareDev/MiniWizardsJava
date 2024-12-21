@@ -18,7 +18,7 @@ public class Game {
     public void init() {
         window = new Window("Mini Wizards", 1280, 720);
         renderPanel = new RenderPanel(this, window);
-        stateManager = new StateManager(new GameState(false));
+        stateManager = new StateManager(new GameState(true));
         InputManager.getInstance().init();
         renderPanel.run();
     }
