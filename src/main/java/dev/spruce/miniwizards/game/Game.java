@@ -10,15 +10,14 @@ import java.awt.*;
 
 public class Game {
 
-    private Window window;
     private RenderPanel renderPanel;
 
     private static StateManager stateManager;
 
     public void init() {
-        window = new Window("Mini Wizards", 1280, 720);
-        renderPanel = new RenderPanel(this, window);
-        stateManager = new StateManager(new GameState(true));
+        Window.createWindow("Mini Wizards", 1280, 720);
+        renderPanel = new RenderPanel(this, Window.getInstance());
+        stateManager = new StateManager(new GameState(false));
         InputManager.getInstance().init();
         renderPanel.run();
     }

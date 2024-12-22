@@ -2,6 +2,7 @@ package dev.spruce.miniwizards.game.entity.player;
 
 import dev.spruce.miniwizards.game.assets.Fonts;
 import dev.spruce.miniwizards.game.graphics.font.FontRenderer;
+import dev.spruce.miniwizards.game.state.impl.GameState;
 
 import java.awt.*;
 import java.net.InetAddress;
@@ -24,9 +25,12 @@ public class PlayerMP extends Player {
 
     @Override
     public void render(Graphics graphics) {
+        int x = (int) getX() - GameState.getCamera().getX();
+        int y = (int) getY() - GameState.getCamera().getY();
+
         graphics.setColor(Color.red);
-        graphics.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
-        FontRenderer.drawStringCentred(graphics, getUsername(), (int) (getX() + getWidth() / 2), (int) getY() - 10, Color.white, Fonts.ARIAL_12);
+        graphics.fillRect(x, y, (int) getWidth(), (int) getHeight());
+        FontRenderer.drawStringCentred(graphics, getUsername(), (int) (x + getWidth() / 2), y - 20, Color.white, Fonts.ARIAL_12);
     }
 
     public InetAddress getAddress() {

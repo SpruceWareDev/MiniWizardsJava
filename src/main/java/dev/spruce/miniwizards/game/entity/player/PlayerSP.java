@@ -1,6 +1,8 @@
 package dev.spruce.miniwizards.game.entity.player;
 
+import dev.spruce.miniwizards.game.graphics.Camera;
 import dev.spruce.miniwizards.game.input.InputManager;
+import dev.spruce.miniwizards.game.state.impl.GameState;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -27,11 +29,12 @@ public class PlayerSP extends Player {
         }
         setX((float) (getX() + (getDx() * WALK_SPEED * delta)));
         setY((float) (getY() + (getDy() * WALK_SPEED * delta)));
+        GameState.getCamera().centerOn((int) getX(), (int) getY());
     }
 
     @Override
     public void render(Graphics graphics) {
         graphics.setColor(Color.blue);
-        graphics.fillRect((int) getX(), (int) getY(), (int) getWidth(), (int) getHeight());
+        graphics.fillRect((int) getX() - GameState.getCamera().getX(), (int) getY() - GameState.getCamera().getY(), (int) getWidth(), (int) getHeight());
     }
 }

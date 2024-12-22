@@ -6,7 +6,9 @@ import javax.swing.*;
 
 public class Window {
 
-    private JFrame window;
+    private static Window instance;
+
+    private final JFrame window;
 
     public Window(String title, int width, int height) {
         window = new JFrame();
@@ -25,5 +27,16 @@ public class Window {
 
     public JFrame getWindow() {
         return window;
+    }
+
+    public static void createWindow(String title, int width, int height) {
+        instance = new Window(title, width, height);
+    }
+
+    public static Window getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("Window has not been initialized");
+        }
+        return instance;
     }
 }
