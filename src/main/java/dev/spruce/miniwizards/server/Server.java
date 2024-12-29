@@ -43,6 +43,7 @@ public class Server extends Thread {
             try {
                 socket.receive(packet);
             } catch (IOException e) {
+                System.out.println("Failed to accept packet:");
                 e.printStackTrace();
                 continue;
             }
@@ -65,15 +66,27 @@ public class Server extends Thread {
                 System.out.println("[Client@" + address.getHostAddress() + ":" + port + "] Username: " + username);
                 PlayerMP player = new PlayerMP(username, 0, 0, 32, 32, 100, address, port);
 
-                // Get currently connected players
                 if (!players.isEmpty()) {
+                    // Get currently connected player usernames
                     String[] connectedPlayers = new String[players.size()];
                     for (int i = 0; i < players.size(); i++) {
                         connectedPlayers[i] = players.get(i).getUsername();
                     }
+                    // Tell the connecting client who is already connected
                     sendPacket(Packet.getData(new S05ConnectedPlayersPacket(connectedPlayers)), address, port);
+                    // Send positions of existing players to connecting player
+                    for (PlayerMP playerMP : players) {
+                        sendPacket(Packet.getData(
+                                new S07PlayerMovedPacket(
+                                        playerMP.getUsername(),
+                                        (int) playerMP.getX(),
+                                        (int) playerMP.getY()
+                                )),
+                                address, port
+                        );
+                    }
                 }
-                // Send to all other players
+                // Tell all existing clients that the new client connected
                 sendToAll(Packet.getData(new S03PlayerJoinedPacket(username)));
                 players.add(player);
                 break;
@@ -82,7 +95,9 @@ public class Server extends Thread {
                 String disconnectingUsername = new String(packetData).trim();
                 System.out.println("[Client@" + address.getHostAddress() + ":" + port + "] Disconnecting : " + disconnectingUsername);
                 getPlayer(disconnectingUsername).ifPresent((playerMP) -> {
+                    // Remove disconnecting player from servers list
                     players.remove(playerMP);
+                    // Tell all other connected clients that the player has disconnected
                     sendToAll(Packet.getData(new S04PlayerLeftPacket(disconnectingUsername)));
                 });
                 break;
