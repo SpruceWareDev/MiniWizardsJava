@@ -7,6 +7,7 @@ import dev.spruce.miniwizards.game.entity.player.PlayerSP;
 import dev.spruce.miniwizards.game.graphics.Camera;
 import dev.spruce.miniwizards.game.input.InputManager;
 import dev.spruce.miniwizards.game.state.State;
+import dev.spruce.miniwizards.game.ui.TabMenu;
 import dev.spruce.miniwizards.game.world.Map;
 import dev.spruce.miniwizards.server.Server;
 import dev.spruce.miniwizards.server.packet.Packet;
@@ -42,7 +43,7 @@ public class GameState extends State {
             server.start();
         }
 
-        player = new PlayerSP("joe", 0, 0, 32, 32, 100);
+        player = new PlayerSP("al0rin", 0, 0, 32, 32, 100);
 
         camera = new Camera(0, 0);
         map = new Map(128, 128);
@@ -84,6 +85,11 @@ public class GameState extends State {
 
         for (PlayerMP player : client.getPlayers()) {
             player.render(graphics);
+        }
+
+        // Tab menu
+        if (InputManager.getInstance().isKeyDown(KeyEvent.VK_C)) {
+            TabMenu.render(graphics, client);
         }
     }
 
